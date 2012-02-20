@@ -248,6 +248,7 @@ class Model extends Module
         @[key](value)
       else
         @[key] = value
+    @id = @_id if @_id
     this
 
   attributes: ->
