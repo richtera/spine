@@ -325,10 +325,21 @@ class Model extends Module
   toString: ->
     "<#{@constructor.className} (#{JSON.stringify(@)})>"
 
+  populateAt: (obj, key, value) ->
+    index = key.indexOf('.')
+    if index == -1
+      obj[key] = value
+    else
+      rem = key.substring(index + 1)
+      key = key.substring(0, index)
+      if not obj[key]
+        obj[key] = {}
+      @populateAt(obj[key], rem, value)
+  
   fromForm: (form) ->
     result = {}
     for key in $(form).serializeArray()
-      result[key.name] = key.value
+      @populateAt(result, key.name, key.value)
     @load(result)
 
   exists: ->
